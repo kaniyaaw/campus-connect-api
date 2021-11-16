@@ -1,43 +1,33 @@
 // See http://docs.sequelizejs.com/en/latest/docs/models-definition/
 // for more of what you can do here.
+const { HasMany } = require('sequelize');
 const Sequelize = require('sequelize');
 const DataTypes = Sequelize.DataTypes;
 
 module.exports = function (app) {
   const sequelizeClient = app.get('sequelizeClient');
-  const students = sequelizeClient.define('students', {
-  
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true
-    },
-    password: {
+  const courses = sequelizeClient.define('courses', {
+    subject: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    first_name: {
+    number: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    last_name: {
+    title: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    middle_initial: {
+    section: {
       type: DataTypes.STRING,
-      allowNull: true
-    },
-    profile_picture: {
-      type: DataTypes.STRING,
-      allowNull: true
-    },
-    dob: {
-      type: DataTypes.DATEONLY,
       allowNull: false
     },
-  
-  
+    professor: {
+      type: DataTypes.STRING,
+      allowNull: false
+    }
+
   }, {
     hooks: {
       beforeCount(options) {
@@ -47,12 +37,12 @@ module.exports = function (app) {
   });
 
   // eslint-disable-next-line no-unused-vars
-  students.associate = function (models) {
+  courses.associate = function (models) {
     // Define associations here
     // See http://docs.sequelizejs.com/en/latest/docs/associations/
-    students.belongsToMany(models.courses,{through: 'courses_students'})
-    students.hasMany(models.messages)
+    courses.belongsToMany(models.students,{through: 'courses_students'})
+    courses.hasMany(models.messages)
   };
 
-  return students;
+  return courses;
 };
